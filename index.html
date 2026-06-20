@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AR Sculpture Prototype</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f7f4ef; color: #111; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 18px; }
+    h1 { font-size: 24px; margin: 8px 0 8px; }
+    p { line-height: 1.45; margin: 0 0 14px; }
+    model-viewer { width: 100%; height: 68vh; min-height: 480px; max-height: 720px; background: #ebe6dc; border-radius: 18px; overflow: hidden; }
+    .ar-button { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); border: 0; border-radius: 999px; padding: 14px 24px; font-weight: bold; font-size: 16px; background: #111; color: white; box-shadow: 0 8px 22px rgba(0,0,0,.25); }
+    .failure { position: absolute; left: 12px; right: 12px; bottom: 16px; background: white; color: #111; border-radius: 12px; padding: 12px; font-size: 14px; }
+    .note { margin-top: 10px; font-size: 13px; color: #444; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>AR Sculpture Prototype</h1>
+    <p>Tap <strong>View in AR</strong> to place the digital sculpture in your space. The page preview has a slow embedded animation; the current iPhone AR file is a static placement test.</p>
+
+    <model-viewer
+      id="viewer"
+      src="group_17_24_23_18_animated_root.glb"
+      ios-src="group_17_24_23_18.usdz"
+      alt="AR sculpture prototype"
+      ar
+      ar-modes="quick-look scene-viewer webxr"
+      quick-look-browsers="safari chrome"
+      camera-controls
+      disable-pan
+      disable-zoom
+      interaction-prompt="none"
+      camera-orbit="0deg 75deg 6m"
+      field-of-view="28deg"
+      autoplay
+      animation-name="slow_root_rotation_24s"
+      shadow-intensity="1"
+      exposure="1">
+
+      <button slot="ar-button" class="ar-button">View in AR</button>
+
+      <div slot="ar-failure" class="failure">
+        AR is not available here. Try Safari on iPhone or Chrome on Android.
+      </div>
+    </model-viewer>
+
+    <div class="note">Desktop browsers usually show the model but not the AR button. Test AR on iPhone Safari or Android Chrome.</div>
+  </main>
+</body>
+</html>
