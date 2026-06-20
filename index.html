@@ -21,14 +21,12 @@
     <h1>AR Sculpture Prototype</h1>
     <p>Tap <strong>View in AR</strong> to place the digital sculpture in your space. The page preview has a slow embedded animation; the current iPhone AR file is a static placement test.</p>
 
-    <model-viewer
-      id="viewer"
+     <model-viewer
       src="group_17_24_23_18_animated_root.glb"
       ios-src="group_17_24_23_18.usdz"
-      alt="AR sculpture prototype"
       ar
+      ar-scale="fixed"
       ar-modes="quick-look scene-viewer webxr"
-      quick-look-browsers="safari chrome"
       camera-controls
       disable-pan
       disable-zoom
@@ -36,15 +34,11 @@
       camera-orbit="0deg 75deg 6m"
       field-of-view="28deg"
       autoplay
-      animation-name="slow_root_rotation_24s"
+      auto-rotate
+      rotation-per-second="4deg"
       shadow-intensity="1"
-      exposure="1">
-
-      <button slot="ar-button" class="ar-button">View in AR</button>
-
-      <div slot="ar-failure" class="failure">
-        AR is not available here. Try Safari on iPhone or Chrome on Android.
-      </div>
+      exposure="1"
+      style="width:100%; height:520px; background:#ebe6dc; border-radius:18px;">
     </model-viewer>
 
     <div class="note">Desktop browsers usually show the model but not the AR button. Test AR on iPhone Safari or Android Chrome.</div>
