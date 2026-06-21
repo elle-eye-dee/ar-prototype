@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Participatory AR Sculpture Prototype</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    html, body { margin:0; padding:0; background:#f7f4ef; color:#111; font-family: Arial, sans-serif; }
+    .page { box-sizing:border-box; min-height:100vh; padding:18px; display:flex; flex-direction:column; gap:14px; }
+    h1 { font-size:22px; line-height:1.15; margin:0; }
+    p { font-size:15px; line-height:1.35; margin:0; max-width:620px; }
+    .controls { display:flex; flex-direction:column; gap:10px; max-width:720px; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .label { font-size:13px; font-weight:bold; min-width:56px; }
+    .choice { border:1px solid #111; background:#fff; border-radius:999px; padding:10px 14px; font-size:14px; cursor:pointer; }
+    .choice.active { background:#111; color:#fff; }
+    .color-dot { width:34px; height:34px; border-radius:50%; border:2px solid #111; cursor:pointer; }
+    .color-dot.active { outline:3px solid #111; outline-offset:3px; }
+    model-viewer { width:100%; height:58vh; min-height:390px; background:#ebe6dc; border-radius:18px; overflow:hidden; }
+    .ar-button { position:absolute; left:50%; bottom:22px; transform:translateX(-50%); border:0; border-radius:999px; padding:15px 24px; font-size:16px; font-weight:bold; background:#111; color:white; box-shadow:0 8px 22px rgba(0,0,0,.25); cursor:pointer; }
+    .ar-failure { position:absolute; left:12px; right:12px; bottom:16px; background:white; color:#111; border-radius:12px; padding:12px; font-size:14px; line-height:1.35; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>Participatory AR Sculpture Prototype</h1>
+    <p>Choose a virtual addition, then tap “View in AR” to place the composition in your space.</p>
+
+    <div class="controls">
+      <div class="row" id="shape-row">
+        <span class="label">Shape</span>
+        <button class="choice active" data-shape="base">Base only</button>
+        <button class="choice" data-shape="arch">Arch</button>
+        <button class="choice" data-shape="sweep">Sweep</button>
+        <button class="choice" data-shape="loop">Loop</button>
+      </div>
+      <div class="row" id="color-row">
+        <span class="label">Color</span>
+        <button class="color-dot active" data-color="red" style="background:#ff2e0f" aria-label="red"></button>
+        <button class="color-dot" data-color="teal" style="background:#006b7a" aria-label="teal"></button>
+        <button class="color-dot" data-color="yellow" style="background:#ffb805" aria-label="yellow"></button>
+        <button class="color-dot" data-color="black" style="background:#050505" aria-label="black"></button>
+      </div>
+    </div>
+
+    <model-viewer
+      id="viewer"
+      src="base.glb"
+      ios-src="base.usdz"
+      alt="AR sculpture prototype"
+      ar
+      ar-placement="floor"
+      ar-modes="quick-look scene-viewer webxr"
+      quick-look-browsers="safari chrome"
+      camera-controls
+      disable-pan
+      disable-zoom
+      interaction-prompt="none"
+      camera-orbit="0deg 75deg 6m"
+      field-of-view="28deg"
+      auto-rotate
+      rotation-per-second="2deg"
+      shadow-intensity="1"
+      exposure="1">
+
+      <button slot="ar-button" class="ar-button">View in AR</button>
+      <div slot="ar-failure" class="ar-failure">AR is not available here. Try Safari on iPhone or Chrome on Android.</div>
+    </model-viewer>
+  </main>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    let selectedShape = 'base';
+    let selectedColor = 'red';
+
+    function updateModel() {
+      let name = selectedShape === 'base' ? 'base' : `add_${selectedShape}_${selectedColor}`;
+      viewer.setAttribute('src', `${name}.glb`);
+      viewer.setAttribute('ios-src', `${name}.usdz`);
+    }
+
+    document.querySelectorAll('[data-shape]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedShape = btn.dataset.shape;
+        document.querySelectorAll('[data-shape]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateModel();
+      });
+    });
+
+    document.querySelectorAll('[data-color]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedColor = btn.dataset.color;
+        document.querySelectorAll('[data-color]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (selectedShape !== 'base') updateModel();
+      });
+    });
+  </script>
+</body>
+</html>
